@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bitterroot 3D | Montana Rooted 3D Printing</title>
+  <meta name="description" content="Bitterroot 3D: Montana-made 3D printed grizzly gear, chess sets, koozies and custom drawer organizers. Website coming soon.">
+  <meta property="og:title" content="Bitterroot 3D">
+  <meta property="og:description" content="Montana-made 3D printed gear and custom drawer organizers. Coming soon.">
+  <meta property="og:image" content="https://bitterroot3d.com/logo.png">
+  <meta name="theme-color" content="#22A7C9">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    :root {
+      --teal: #22A7C9;      /* sign background */
+      --charcoal: #2B3036;  /* sign artwork */
+      --gold: #F4C430;      /* "3D" accent */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: var(--teal);
+      color: var(--charcoal);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px 16px;
+      min-height: 100vh;
+    }
+    main { width: 100%; max-width: 720px; }
+    .logo { width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto 32px; }
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .rule {
+      width: 64px; height: 6px; border: 0; border-radius: 3px;
+      background: var(--gold); margin: 0 auto 20px;
+    }
+    p { font-size: 1.125rem; line-height: 1.6; max-width: 560px; margin: 0 auto 12px; }
+    .contact { margin-top: 28px; }
+    .btn {
+      display: inline-block;
+      background: var(--charcoal);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 999px;
+      letter-spacing: .03em;
+    }
+    .btn:hover { background: #000; }
+    .btn:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+    footer { margin-top: 48px; font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="logo.png" width="1207" height="863"
+         alt="Bitterroot 3D Creations logo: mountains and a bitterroot flower above the words Bitterroot 3D Creations, Montana Rooted. Custom prints, designed products, home and outdoor.">
+    <h1>Coming Soon</h1>
+    <hr class="rule" aria-hidden="true">
+    <p>Montana-made 3D printed grizzly gear, chess sets, koozies and gifts, plus custom drawer organizers built to fit your space.</p>
+    <p>Our shop is almost ready. Want a custom piece now? Reach out.</p>
+    <div class="contact">
+      <!-- EDIT: replace with the email you want customers to use -->
+      <a class="btn" href="mailto:hello@bitterroot3d.com">hello@bitterroot3d.com</a>
+    </div>
+  </main>
+  <footer>&copy; <span id="yr">2026</span> Bitterroot 3D &middot; Montana</footer>
+  <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
