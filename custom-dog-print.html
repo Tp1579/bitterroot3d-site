@@ -248,18 +248,37 @@
 
         status.className = 'status';
         status.textContent = 'Sending...';
-        fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        }).then(function (r) {
-          if (!r.ok) throw new Error('bad response');
+        var hasPhotos = form.elements.photos.files.length > 0;
+
+        function post(withPhotos) {
+          var data = new FormData(form);
+          if (!withPhotos) data.delete('photos');
+          return fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+          }).then(function (r) {
+            if (!r.ok) throw new Error('bad response');
+          });
+        }
+
+        post(hasPhotos).then(function () {
           form.reset();
           status.className = 'status ok';
-          status.textContent = 'Thank you! We got your request and photos. We will email you a quote soon.';
+          status.textContent = hasPhotos
+            ? 'Thank you! We got your request and photos. We will email you a quote soon.'
+            : 'Thank you! We got your request. We will email you a quote soon.';
+        }).catch(function () {
+          if (!hasPhotos) throw new Error('failed');
+          // Photos were rejected (too large or not allowed): send the request without them.
+          return post(false).then(function () {
+            form.reset();
+            status.className = 'status ok';
+            status.textContent = 'We got your request, but your photos did not upload. Please email 2 to 4 photos of your dog to ' + OWNER_EMAIL + ' and we will send you a quote.';
+          });
         }).catch(function () {
           status.className = 'status err';
-          status.textContent = 'Something went wrong. Try fewer or smaller photos, or email your request and photos to ' + OWNER_EMAIL + '.';
+          status.textContent = 'Something went wrong. Please email your request and photos to ' + OWNER_EMAIL + '.';
         });
       });
     })();
