@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Custom Dog Print Order | Bitterroot 3D</title>
-  <meta name="description" content="Order a custom 3D printed piece of your dog from Bitterroot 3D: keychains, ornaments, coasters and figurines, made in Montana.">
+  <title>Custom Pet 3D Print Order | Bitterroot 3D</title>
+  <meta name="description" content="Order a custom 3D printed piece of your pet from Bitterroot 3D: keychains, ornaments, coasters and figurines, made in Montana.">
   <meta name="theme-color" content="#22A7C9">
   <link rel="icon" type="image/png" href="logo.png">
   <style>
@@ -46,6 +46,12 @@
     }
     fieldset { border: 0; margin-bottom: 20px; }
     legend { font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; padding: 0; }
+    .examples { text-align: center; margin-bottom: 24px; }
+    .examples h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 12px; }
+    .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+    .gallery figure { margin: 0; }
+    .gallery img { display: block; height: 320px; width: auto; max-width: 100%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
+    .gallery figcaption { font-size: .9rem; margin-top: 6px; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .field { margin-bottom: 16px; }
     label { display: block; font-weight: 700; margin-bottom: 4px; }
@@ -103,15 +109,29 @@
       <img class="logo" src="logo.png" width="1207" height="863"
            alt="Bitterroot 3D Creations logo: mountains and a bitterroot flower above the words Bitterroot 3D Creations, Montana Rooted.">
     </a>
-    <h1>Custom Dog Print</h1>
+    <h1>Custom Pet 3D Print</h1>
     <hr class="rule" aria-hidden="true">
-    <p class="intro">Tell us about your dog and what you would like made. We print every piece in Montana.</p>
+    <p class="intro">Tell us about your pet and what you would like made. We print every piece in Montana.</p>
   </header>
 
   <main id="main">
+    <section class="examples" aria-labelledby="examples-title">
+      <h2 id="examples-title">Examples of our work</h2>
+      <div class="gallery">
+        <figure>
+          <img src="example-boxer.jpg" width="744" height="1000" alt="A 3D printed figurine of a sitting boxer dog in brown, black and white with a hanging loop on top of its head.">
+          <figcaption>Boxer ornament</figcaption>
+        </figure>
+        <figure>
+          <img src="example-hound.jpg" width="1000" height="750" alt="A 3D printed figurine of a sitting hound dog with its tongue out, in brown, black and white, with a small loop on its head.">
+          <figcaption>Hound figurine</figcaption>
+        </figure>
+      </div>
+    </section>
+
     <div class="card">
       <form id="order-form" action="https://formsubmit.co/travist.petty@gmail.com" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="_subject" value="New custom dog print request">
+        <input type="hidden" name="_subject" value="New custom pet 3D print request">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_next" value="https://bitterroot3d.com/thank-you.html">
@@ -134,14 +154,14 @@
         </fieldset>
 
         <fieldset>
-          <legend>About your dog</legend>
+          <legend>About your pet</legend>
           <div class="row">
             <div class="field">
-              <label for="dog_name">Dog's name <span class="req" aria-hidden="true">*</span></label>
-              <input id="dog_name" name="dog_name" type="text" required>
+              <label for="pet_name">Pet's name <span class="req" aria-hidden="true">*</span></label>
+              <input id="pet_name" name="pet_name" type="text" required>
             </div>
             <div class="field">
-              <label for="breed">Breed or mix <span class="req" aria-hidden="true">*</span></label>
+              <label for="breed">Type and breed <span class="req" aria-hidden="true">*</span></label>
               <input id="breed" name="breed" type="text" required>
             </div>
           </div>
@@ -183,7 +203,7 @@
         </fieldset>
 
         <fieldset>
-          <legend>Photos of your dog</legend>
+          <legend>Photos of your pet</legend>
           <p class="hint" style="margin-bottom:12px">Add 2 to 4 photos: front, side, and a close-up of the face. Good light helps a lot. JPG or PNG.</p>
           <div class="field">
             <label for="photo1">Photo 1</label>
