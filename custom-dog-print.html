@@ -171,6 +171,7 @@
             </div>
           </div>
           <p class="note"><strong>Pricing:</strong> prices are per item and do not include shipping. If you need your order shipped, we will quote shipping separately before you pay.</p>
+          <p class="note"><strong>Payment:</strong> we accept Venmo or cash. Cash is for local pickup or delivery. We will send payment details when we confirm your order.</p>
           <div class="field">
             <label for="needed_by">Needed by <span class="hint">Optional</span></label>
             <input id="needed_by" name="needed_by" type="date">
@@ -183,9 +184,22 @@
 
         <fieldset>
           <legend>Photos of your dog</legend>
+          <p class="hint" style="margin-bottom:12px">Add 2 to 4 photos: front, side, and a close-up of the face. Good light helps a lot. JPG or PNG.</p>
           <div class="field">
-            <label for="photos">Upload 2 to 4 photos <span class="hint">Front, side, and a close-up of the face. Good light helps a lot. JPG or PNG.</span></label>
-            <input id="photos" name="photos" type="file" accept="image/jpeg,image/png" multiple>
+            <label for="photo1">Photo 1</label>
+            <input id="photo1" name="photo1" type="file" accept="image/jpeg,image/png" data-photo>
+          </div>
+          <div class="field">
+            <label for="photo2">Photo 2</label>
+            <input id="photo2" name="photo2" type="file" accept="image/jpeg,image/png" data-photo>
+          </div>
+          <div class="field">
+            <label for="photo3">Photo 3 <span class="hint">Optional</span></label>
+            <input id="photo3" name="photo3" type="file" accept="image/jpeg,image/png" data-photo>
+          </div>
+          <div class="field">
+            <label for="photo4">Photo 4 <span class="hint">Optional</span></label>
+            <input id="photo4" name="photo4" type="file" accept="image/jpeg,image/png" data-photo>
           </div>
         </fieldset>
 
@@ -266,19 +280,21 @@
         e.preventDefault();
         if (form.elements._honey.value) return;
 
-        var input = form.elements.photos;
-        var files = Array.prototype.slice.call(input.files);
-        if (files.length > 4) { show('Please choose no more than 4 photos.', 'err'); return; }
+        var inputs = Array.prototype.slice.call(form.querySelectorAll('input[data-photo]'))
+          .filter(function (i) { return i.files.length > 0; });
 
         btn.disabled = true;
-        if (!files.length) { show('Sending...'); form.submit(); return; }
+        if (!inputs.length) { show('Sending...'); form.submit(); return; }
 
         show('Preparing your photos...');
+        var files = inputs.map(function (i) { return i.files[0]; });
         prepare(files).then(function (res) {
           if (res.total > MAX_TOTAL) throw new Error('too big');
-          var dt = new DataTransfer();
-          res.files.forEach(function (f) { dt.items.add(f); });
-          input.files = dt.files;
+          inputs.forEach(function (input, idx) {
+            var dt = new DataTransfer();
+            dt.items.add(res.files[idx]);
+            input.files = dt.files;
+          });
           show('Sending...');
           form.submit();
         }).catch(function () {
