@@ -105,7 +105,7 @@
     </a>
     <h1>Custom Dog Print</h1>
     <hr class="rule" aria-hidden="true">
-    <p class="intro">Tell us about your dog and what you would like made. We print every piece in Montana and will email you a quote and a preview before we start.</p>
+    <p class="intro">Tell us about your dog and what you would like made. We print every piece in Montana.</p>
   </header>
 
   <main id="main">
@@ -260,15 +260,15 @@
           form.reset();
           status.className = 'status ok';
           status.textContent = hasPhotos
-            ? 'Thank you! We got your request and photos. We will email you a quote soon.'
-            : 'Thank you! We got your request. We will email you a quote soon.';
+            ? 'Thank you! We got your request and photos. We will be in touch soon.'
+            : 'Thank you! We got your request. We will be in touch soon.';
         }).catch(function () {
           if (!hasPhotos) throw new Error('failed');
           // Photos were rejected (too large or not allowed): send the request without them.
           return post(false).then(function () {
             form.reset();
             status.className = 'status ok';
-            status.textContent = 'We got your request, but your photos did not upload. Please email 2 to 4 photos of your dog to ' + OWNER_EMAIL + ' and we will send you a quote.';
+            status.textContent = 'We got your request, but your photos did not upload. Please email 2 to 4 photos of your dog to ' + OWNER_EMAIL + ' and we will be in touch soon.';
           });
         }).catch(function () {
           status.className = 'status err';
