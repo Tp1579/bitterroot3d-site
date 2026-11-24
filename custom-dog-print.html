@@ -110,7 +110,11 @@
 
   <main id="main">
     <div class="card">
-      <form id="order-form" action="https://formspree.io/f/mbgopwkg" method="POST" enctype="multipart/form-data">
+      <form id="order-form" action="https://formsubmit.co/travist.petty@gmail.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_subject" value="New custom dog print request">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://bitterroot3d.com/thank-you.html">
         <fieldset>
           <legend>About you</legend>
           <div class="row">
@@ -180,15 +184,15 @@
         <fieldset>
           <legend>Photos of your dog</legend>
           <div class="field">
-            <label for="photos">Upload 2 to 4 photos <span class="hint">Front, side, and a close-up of the face. Good light helps a lot. JPG, PNG or HEIC.</span></label>
-            <input id="photos" name="photos" type="file" accept="image/*,.heic,.heif" multiple>
+            <label for="photos">Upload 2 to 4 photos <span class="hint">Front, side, and a close-up of the face. Good light helps a lot. JPG or PNG.</span></label>
+            <input id="photos" name="photos" type="file" accept="image/jpeg,image/png" multiple>
           </div>
         </fieldset>
 
         <!-- Spam trap: real visitors never see or fill this in -->
         <div class="hp" aria-hidden="true">
           <label for="website">Leave this field empty</label>
-          <input id="website" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+          <input id="website" name="_honey" type="text" tabindex="-1" autocomplete="off">
         </div>
 
         <button class="btn" type="submit">Send my order request</button>
@@ -208,71 +212,78 @@
     (function () {
       var form = document.getElementById('order-form');
       var status = document.getElementById('status');
+      var btn = form.querySelector('button[type="submit"]');
       var OWNER_EMAIL = 'travist.petty@gmail.com';
+      var MAX_TOTAL = 9 * 1024 * 1024; // FormSubmit allows 10 MB combined; stay under it
 
-      function labelFor(el) {
-        var l = form.querySelector('label[for="' + el.id + '"]');
-        return l ? l.childNodes[0].textContent.trim() : el.name;
+      function show(msg, cls) { status.className = 'status ' + (cls || ''); status.textContent = msg; }
+
+      function loadBitmap(file) {
+        if (window.createImageBitmap) {
+          return createImageBitmap(file, { imageOrientation: 'from-image' });
+        }
+        return new Promise(function (resolve, reject) {
+          var img = new Image();
+          img.onload = function () { resolve(img); };
+          img.onerror = reject;
+          img.src = URL.createObjectURL(file);
+        });
       }
 
-      // Until a Formspree form ID is set, fall back to a prefilled email so the form still works.
-      function sendByEmail() {
-        var lines = [];
-        Array.prototype.forEach.call(form.elements, function (el) {
-          if (!el.name || el.name === '_gotcha' || el.type === 'submit' || !el.value) return;
-          lines.push(labelFor(el) + ': ' + el.value);
+      // Shrink a photo so several phone pictures fit under the upload limit.
+      function shrink(file, maxSide, quality) {
+        return loadBitmap(file).then(function (bmp) {
+          var w = bmp.width, h = bmp.height;
+          var scale = Math.min(1, maxSide / Math.max(w, h));
+          var c = document.createElement('canvas');
+          c.width = Math.round(w * scale);
+          c.height = Math.round(h * scale);
+          c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+          return new Promise(function (resolve, reject) {
+            c.toBlob(function (blob) {
+              if (!blob) { reject(new Error('encode failed')); return; }
+              var name = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+              resolve(new File([blob], name, { type: 'image/jpeg' }));
+            }, 'image/jpeg', quality);
+          });
         });
-        var subject = 'Custom dog print request';
-        window.location.href = 'mailto:' + OWNER_EMAIL +
-          '?subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(lines.join('\n') + '\n\n(Please attach 2 to 4 photos of your dog.)');
-        status.className = 'status ok';
-        status.textContent = 'Your email app should open with your request filled in. Attach your dog photos and press send.';
+      }
+
+      function prepare(files) {
+        var steps = [[2000, 0.85], [1600, 0.8], [1200, 0.75]];
+        function attempt(i) {
+          return Promise.all(files.map(function (f) { return shrink(f, steps[i][0], steps[i][1]); }))
+            .then(function (out) {
+              var total = out.reduce(function (n, f) { return n + f.size; }, 0);
+              if (total <= MAX_TOTAL || i === steps.length - 1) return { files: out, total: total };
+              return attempt(i + 1);
+            });
+        }
+        return attempt(0);
       }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        if (form.elements._gotcha.value) return;
-        if (form.action.indexOf('YOUR_FORM_ID') !== -1) { sendByEmail(); return; }
-        if (form.elements.photos.files.length > 4) {
-          status.className = 'status err';
-          status.textContent = 'Please choose no more than 4 photos.';
-          return;
-        }
+        if (form.elements._honey.value) return;
 
-        status.className = 'status';
-        status.textContent = 'Sending...';
-        var hasPhotos = form.elements.photos.files.length > 0;
+        var input = form.elements.photos;
+        var files = Array.prototype.slice.call(input.files);
+        if (files.length > 4) { show('Please choose no more than 4 photos.', 'err'); return; }
 
-        function post(withPhotos) {
-          var data = new FormData(form);
-          if (!withPhotos) data.delete('photos');
-          return fetch(form.action, {
-            method: 'POST',
-            body: data,
-            headers: { 'Accept': 'application/json' }
-          }).then(function (r) {
-            if (!r.ok) throw new Error('bad response');
-          });
-        }
+        btn.disabled = true;
+        if (!files.length) { show('Sending...'); form.submit(); return; }
 
-        post(hasPhotos).then(function () {
-          form.reset();
-          status.className = 'status ok';
-          status.textContent = hasPhotos
-            ? 'Thank you! We got your request and photos. We will be in touch soon.'
-            : 'Thank you! We got your request. We will be in touch soon.';
+        show('Preparing your photos...');
+        prepare(files).then(function (res) {
+          if (res.total > MAX_TOTAL) throw new Error('too big');
+          var dt = new DataTransfer();
+          res.files.forEach(function (f) { dt.items.add(f); });
+          input.files = dt.files;
+          show('Sending...');
+          form.submit();
         }).catch(function () {
-          if (!hasPhotos) throw new Error('failed');
-          // Photos were rejected (too large or not allowed): send the request without them.
-          return post(false).then(function () {
-            form.reset();
-            status.className = 'status ok';
-            status.textContent = 'We got your request, but your photos did not upload. Please email 2 to 4 photos of your dog to ' + OWNER_EMAIL + ' and we will be in touch soon.';
-          });
-        }).catch(function () {
-          status.className = 'status err';
-          status.textContent = 'Something went wrong. Please email your request and photos to ' + OWNER_EMAIL + '.';
+          btn.disabled = false;
+          show('We could not prepare those photos. Try different or fewer photos, or email your request and photos to ' + OWNER_EMAIL + '.', 'err');
         });
       });
     })();
