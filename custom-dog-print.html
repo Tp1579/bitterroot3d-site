@@ -86,6 +86,7 @@
       letter-spacing: .03em;
     }
     .btn:hover { background: #000; }
+    .note a { color: var(--maroon); font-weight: 700; }
     .status { margin-top: 16px; font-weight: 700; }
     .status.ok { color: #0b5d1e; }
     .status.err { color: #8a1c1c; }
@@ -109,7 +110,7 @@
 
   <main id="main">
     <div class="card">
-      <form id="order-form" action="https://formspree.io/f/mbgopwkg" method="POST">
+      <form id="order-form" action="https://formspree.io/f/mbgopwkg" method="POST" enctype="multipart/form-data">
         <fieldset>
           <legend>About you</legend>
           <div class="row">
@@ -182,9 +183,13 @@
           </div>
         </fieldset>
 
-        <div class="note">
-          <strong>Photos:</strong> after you submit, reply to our confirmation email with 2 to 4 clear photos of your dog (front, side, and a close-up of the face). Good light helps a lot.
-        </div>
+        <fieldset>
+          <legend>Photos of your dog</legend>
+          <div class="field">
+            <label for="photos">Upload 2 to 4 photos <span class="hint">Front, side, and a close-up of the face. Good light helps a lot. JPG, PNG or HEIC.</span></label>
+            <input id="photos" name="photos" type="file" accept="image/*,.heic,.heif" multiple>
+          </div>
+        </fieldset>
 
         <!-- Spam trap: real visitors never see or fill this in -->
         <div class="hp" aria-hidden="true">
@@ -235,6 +240,11 @@
         e.preventDefault();
         if (form.elements._gotcha.value) return;
         if (form.action.indexOf('YOUR_FORM_ID') !== -1) { sendByEmail(); return; }
+        if (form.elements.photos.files.length > 4) {
+          status.className = 'status err';
+          status.textContent = 'Please choose no more than 4 photos.';
+          return;
+        }
 
         status.className = 'status';
         status.textContent = 'Sending...';
@@ -246,10 +256,10 @@
           if (!r.ok) throw new Error('bad response');
           form.reset();
           status.className = 'status ok';
-          status.textContent = 'Thank you! We got your request and will email you soon. Reply to our email with photos of your dog.';
+          status.textContent = 'Thank you! We got your request and photos. We will email you a quote soon.';
         }).catch(function () {
           status.className = 'status err';
-          status.textContent = 'Something went wrong. Please email ' + OWNER_EMAIL + ' directly.';
+          status.textContent = 'Something went wrong. Try fewer or smaller photos, or email your request and photos to ' + OWNER_EMAIL + '.';
         });
       });
     })();
