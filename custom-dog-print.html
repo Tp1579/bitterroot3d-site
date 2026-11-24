@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom Dog Print Order | Bitterroot 3D</title>
+  <meta name="description" content="Order a custom 3D printed piece of your dog from Bitterroot 3D: keychains, ornaments, magnets, coasters and figurines, made in Montana.">
+  <meta name="theme-color" content="#22A7C9">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    :root {
+      --teal: #22A7C9;
+      --charcoal: #2B3036;
+      --gold: #F4C430;
+      --maroon: #70002E;
+      --paper: #ffffff;
+      --line: #c9d1d8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--teal);
+      color: var(--charcoal);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      padding: 24px 16px 40px;
+    }
+    .skip { position: absolute; left: -9999px; }
+    .skip:focus { left: 16px; top: 16px; background: #fff; color: var(--charcoal); padding: 8px 12px; z-index: 10; }
+    header, main, footer { max-width: 720px; margin: 0 auto; }
+    header { text-align: center; }
+    .logo { width: 100%; max-width: 360px; height: auto; display: block; margin: 0 auto 16px; }
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .rule { width: 64px; height: 6px; border: 0; border-radius: 3px; background: var(--gold); margin: 0 auto 16px; }
+    .intro { font-size: 1.125rem; max-width: 560px; margin: 0 auto 24px; }
+    .card {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
+    }
+    fieldset { border: 0; margin-bottom: 20px; }
+    legend { font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; padding: 0; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { margin-bottom: 16px; }
+    label { display: block; font-weight: 700; margin-bottom: 4px; }
+    .hint { display: block; font-weight: 400; font-size: .9rem; color: #4a525a; }
+    input, select, textarea {
+      width: 100%;
+      font: inherit;
+      color: var(--charcoal);
+      background: #fff;
+      border: 2px solid #6b747d;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-visible, a:focus-visible {
+      outline: 3px solid var(--maroon);
+      outline-offset: 2px;
+    }
+    .req { color: var(--maroon); }
+    .note {
+      background: #fff8dc;
+      border-left: 6px solid var(--gold);
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--charcoal);
+      color: #fff;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 999px;
+      letter-spacing: .03em;
+    }
+    .btn:hover { background: #000; }
+    .status { margin-top: 16px; font-weight: 700; }
+    .status.ok { color: #0b5d1e; }
+    .status.err { color: #8a1c1c; }
+    .hp { position: absolute; left: -9999px; height: 0; overflow: hidden; }
+    footer { text-align: center; margin-top: 32px; font-size: .9rem; }
+    footer a { color: var(--charcoal); font-weight: 700; }
+    @media (max-width: 560px) { .row { grid-template-columns: 1fr; } .card { padding: 18px; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#order-form">Skip to the order form</a>
+  <header>
+    <a href="index.html" aria-label="Bitterroot 3D home">
+      <img class="logo" src="logo.png" width="1207" height="863"
+           alt="Bitterroot 3D Creations logo: mountains and a bitterroot flower above the words Bitterroot 3D Creations, Montana Rooted.">
+    </a>
+    <h1>Custom Dog Print</h1>
+    <hr class="rule" aria-hidden="true">
+    <p class="intro">Tell us about your dog and what you would like made. We print every piece in Montana and will email you a quote and a preview before we start.</p>
+  </header>
+
+  <main id="main">
+    <div class="card">
+      <form id="order-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <fieldset>
+          <legend>About you</legend>
+          <div class="row">
+            <div class="field">
+              <label for="name">Your name <span class="req" aria-hidden="true">*</span></label>
+              <input id="name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="phone">Phone <span class="hint">Optional</span></label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>About your dog</legend>
+          <div class="row">
+            <div class="field">
+              <label for="dog_name">Dog's name <span class="req" aria-hidden="true">*</span></label>
+              <input id="dog_name" name="dog_name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="breed">Breed or mix <span class="req" aria-hidden="true">*</span></label>
+              <input id="breed" name="breed" type="text" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="coat">Coat colors and markings <span class="hint">For example: black with white chest, one floppy ear</span></label>
+            <input id="coat" name="coat" type="text">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>What would you like?</legend>
+          <div class="row">
+            <div class="field">
+              <label for="product">Item <span class="req" aria-hidden="true">*</span></label>
+              <select id="product" name="product" required>
+                <option value="">Choose one</option>
+                <option>Keychain</option>
+                <option>Christmas ornament</option>
+                <option>Fridge magnet</option>
+                <option>Coaster</option>
+                <option>Desk figurine</option>
+                <option>Other (describe below)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="quantity">Quantity</label>
+              <input id="quantity" name="quantity" type="number" min="1" max="100" value="1" inputmode="numeric">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="colors">Preferred colors <span class="hint">Example: maroon and silver</span></label>
+              <input id="colors" name="colors" type="text">
+            </div>
+            <div class="field">
+              <label for="needed_by">Needed by <span class="hint">Optional</span></label>
+              <input id="needed_by" name="needed_by" type="date">
+            </div>
+          </div>
+          <div class="field">
+            <label for="notes">Anything else? <span class="hint">Size, name text, special requests</span></label>
+            <textarea id="notes" name="notes"></textarea>
+          </div>
+        </fieldset>
+
+        <div class="note">
+          <strong>Photos:</strong> after you submit, reply to our confirmation email with 2 to 4 clear photos of your dog (front, side, and a close-up of the face). Good light helps a lot.
+        </div>
+
+        <!-- Spam trap: real visitors never see or fill this in -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">Leave this field empty</label>
+          <input id="website" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="btn" type="submit">Send my order request</button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p><a href="index.html">Back to Bitterroot 3D</a></p>
+    <p>&copy; <span id="yr">2026</span> Bitterroot 3D &middot; Montana</p>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    (function () {
+      var form = document.getElementById('order-form');
+      var status = document.getElementById('status');
+      var OWNER_EMAIL = 'travist.petty@gmail.com';
+
+      function labelFor(el) {
+        var l = form.querySelector('label[for="' + el.id + '"]');
+        return l ? l.childNodes[0].textContent.trim() : el.name;
+      }
+
+      // Until a Formspree form ID is set, fall back to a prefilled email so the form still works.
+      function sendByEmail() {
+        var lines = [];
+        Array.prototype.forEach.call(form.elements, function (el) {
+          if (!el.name || el.name === '_gotcha' || el.type === 'submit' || !el.value) return;
+          lines.push(labelFor(el) + ': ' + el.value);
+        });
+        var subject = 'Custom dog print request';
+        window.location.href = 'mailto:' + OWNER_EMAIL +
+          '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(lines.join('\n') + '\n\n(Please attach 2 to 4 photos of your dog.)');
+        status.className = 'status ok';
+        status.textContent = 'Your email app should open with your request filled in. Attach your dog photos and press send.';
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (form.elements._gotcha.value) return;
+        if (form.action.indexOf('YOUR_FORM_ID') !== -1) { sendByEmail(); return; }
+
+        status.className = 'status';
+        status.textContent = 'Sending...';
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        }).then(function (r) {
+          if (!r.ok) throw new Error('bad response');
+          form.reset();
+          status.className = 'status ok';
+          status.textContent = 'Thank you! We got your request and will email you soon. Reply to our email with photos of your dog.';
+        }).catch(function () {
+          status.className = 'status err';
+          status.textContent = 'Something went wrong. Please email ' + OWNER_EMAIL + ' directly.';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
